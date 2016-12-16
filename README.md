@@ -7,7 +7,7 @@ data is from [ipip.net](https://www.ipip.net/)
 
 # download
 
-
+[ipip.alfredworkflow](https://github.com/caorong/ipip-alfred-workflow/releases/download/1.0.0/ipip.alfredworkflow)
 
 # how to use
 
