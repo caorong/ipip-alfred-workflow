@@ -70,3 +70,4 @@ if [[ ! -z "$rtbresult" ]]; then
 	echo '</item>'
 fi
 
+/bin/echo '</items>'
