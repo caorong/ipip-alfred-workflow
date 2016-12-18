@@ -9,7 +9,7 @@ result=$(curl -s https://www.ipip.net/ip.html -H "User-Agent: Safari/537.36" -H 
 
 address=`echo "$result" | grep '<div><span id=\"myself\">' -A 1 |tail -n 1| sed "s/<\/span>//g" | sed "s/ //g"`
 
-info=`echo "$result" |grep '<td style=\"text-align: center;\">' | sed -e 's/<[^>]*>//g' | sed "s/ //g" | sed "s/购买此数据//g" |sed "s/（更多数据请购买付费IP库）//g"`
+info=`echo "$result" |grep '<td style=\"text-align: center;\">' | sed -e 's/<[^>]*>//g' | sed "s/ //g" | sed "s/购买此数据//g" |sed "s/（.*）//g"`
 
 # echo $address
 # echo $info
@@ -24,12 +24,35 @@ if [[ ! -z "$address" ]]; then
 fi
 
 if [[ ! -z "$info" ]]; then
-	uid=`echo $address | md5 | awk '{print $1}'`
-	echo '<item uid="'$uid'" arg="'$info'">'
-	echo '<title>'$info'</title>'
-	echo '<subtitle>IDC 猜测</subtitle>'
-	echo '<icon>icon.png</icon>'
-	echo '</item>'
+    head=`echo "$info" | head -n 1`
+    tail=`echo "$info" | tail -n 1`
+    
+    # echo "$head"
+    # echo "$tail"
+
+    if [[ "$head" == "$tail" ]]; then
+        uid=`echo "$head" | md5 | awk '{print $1}'`
+        echo '<item uid="'$uid'" arg="'$head'">'
+        echo '<title>'$head'</title>'
+        echo '<subtitle>IDC 猜测</subtitle>'
+        echo '<icon>icon.png</icon>'
+        echo '</item>'
+    else
+        uid=`echo "$head" | md5 | awk '{print $1}'`
+        echo '<item uid="'$uid'" arg="'$head'">'
+        echo '<title>'$head'</title>'
+        echo '<subtitle>IDC 猜测</subtitle>'
+        echo '<icon>icon.png</icon>'
+        echo '</item>'
+
+        uid=`echo "$tail" | md5 | awk '{print $1}'`
+        echo '<item uid="'$uid'" arg="'$tail'">'
+        echo '<title>'$tail'</title>'
+        echo '<subtitle>端口数据</subtitle>'
+        echo '<icon>icon.png</icon>'
+        echo '</item>'
+    fi
+    
 fi
 
 
