@@ -2,7 +2,7 @@
 
 ip='{query}'
 
-result=$(curl -s https://www.ipip.net/ip.html -H "User-Agent: Safari/537.36" -H "Referer: https://www.ipip.net/ip.html" --data "ip=${ip}" --compressed)
+result=$(curl -s https://www.ipip.net/ip.html -H "User-Agent: Safari/537.36" -H "Referer: https://www.ipip.net/" --data "ip=${ip}" --compressed)
 
 /bin/echo '<?xml version="1.0"?>'
 /bin/echo '<items>'
