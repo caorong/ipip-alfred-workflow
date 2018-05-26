@@ -4,12 +4,17 @@ ip='{query}'
 
 result=$(curl -s https://www.ipip.net/ip.html -H "User-Agent: Safari/537.36" -H "Referer: https://www.ipip.net/" --data "ip=${ip}" --compressed)
 
+# echo $ip
+# echo "$result"
+
 /bin/echo '<?xml version="1.0"?>'
 /bin/echo '<items>'
 
-address=`echo "$result" | grep '<div><span id=\"myself\">' -A 1 |tail -n 1| sed "s/<\/span>//g" | sed "s/ //g"`
 
-info=`echo "$result" |grep '<td style=\"text-align: center;\">' | sed -e 's/<[^>]*>//g' | sed "s/ //g" | sed "s/购买此数据//g" |sed "s/（.*）//g"`
+address=`echo "$result" | grep '地理位置' -A 1 | head -n 2 |tail -n 1| sed -e 's/<[^>]*>//g' | sed "s/ //g"`
+
+info=`echo "$result" |grep 'IDC' |head -n 2|tail -n 1 | sed -e 's/<[^>]*>//g' | sed "s/ //g" |sed "s/(.*)//g"`
+
 
 # echo $address
 # echo $info
