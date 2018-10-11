@@ -11,9 +11,10 @@ result=$(curl -s https://www.ipip.net/ip.html -H "User-Agent: Safari/537.36" -H 
 /bin/echo '<items>'
 
 
-address=`echo "$result" | grep '地理位置' -A 1 | head -n 2 |tail -n 1| sed -e 's/<[^>]*>//g' | sed "s/ //g"`
+address=`echo "$result" | grep '地理位置' -A 2 | head -n 3 |tail -n 1| sed -e 's/<[^>]*>//g' | sed "s/ //g"`
 
 info=`echo "$result" |grep 'IDC' |head -n 2|tail -n 1 | sed -e 's/<[^>]*>//g' | sed "s/ //g" |sed "s/(.*)//g"`
+
 
 
 # echo $address
@@ -60,6 +61,17 @@ if [[ ! -z "$info" ]]; then
     
 fi
 
+# 高精度
+highPrecision=`echo "$result" | grep '国内高精度' -A 4|tail -n 1 | sed -e 's/<[^>]*>//g' | sed "s/ //g"|sed "s/查看地图//g"`
+
+if [[ ! -z "$highPrecision" ]]; then
+	uid=`echo $highPrecision | md5 | awk '{print $1}'`
+	echo '<item uid="'$uid'" arg="'$highPrecision'">'
+	echo '<title>'$highPrecision'</title>'
+	echo '<subtitle>国内高精度</subtitle>'
+	echo '<icon>icon.png</icon>'
+	echo '</item>'
+fi
 
 # rtb-asia
 rtbresult=$(curl -s "https://ip.rtbasia.com/webservice/ipip?ipstr=${ip}" -H 'Accept-Encoding: gzip, deflate, sdch, br' -H 'Accept-Language: zh-CN,zh;q=0.8' -H 'Upgrade-Insecure-Requests: 1' -H 'User-Agent: Safari/537.36' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Referer: https://www.ipip.net/ip.html' -H 'Cache-Control: max-age=0' --compressed | grep '真人概率' | sed -e 's/<[^>]*>//g' | sed -e 's/&nbsp;//g' |sed "s/ //g"|sed "s/	//g")
